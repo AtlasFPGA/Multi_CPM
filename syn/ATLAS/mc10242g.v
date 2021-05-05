@@ -40,9 +40,10 @@ pll pll
 (
   .inclk0 (CLK_12MHZ),
   .c0 (clk),
-  .c1 (clk_ram),
-  .c2 (cpuClock),
+  .c1 (cpuClock),
+  .c2 (clk_ram),
   .c3 (clk_ram_ph),
+  .c4 (clk_25m),
   .locked (pll_locked)
 );
 
@@ -50,6 +51,8 @@ assign LED[0]=~TX;
 assign LED[1]=~RX;
 assign LED[2]=~CTS;
 assign LED[3]=~RTS;
+assign LED[4]=~TX2;
+assign LED[5]=~RX2;
 assign LED[7]=~USER_BTN;
 
 wire [18:0] sramAddress;
@@ -79,7 +82,8 @@ Microcomputer Microcomputer
 
   .rxd2    (RX2),
   .txd2    (TX2),
-  .rts2    (),
+  .rts2    (1'b0),
+  .cts2    (1'b0),
 
   .videoR0  (videoR0),
   .videoG0  (videoG0),
@@ -131,5 +135,22 @@ ssdram ram
   .mem_data_io  (DRAM_DQ)
 );
 
+hdmi hdmi_18bits
+(
+	//clocks
+	.CLK_DVI_I(clk_ram),	 
+	.CLK_PIXEL_I(clk_25m),	
 
+	// components
+	.R_I({videoR1,videoR0,5'b0}),
+	.G_I({videoG1,videoG0,5'b0}),
+	.B_I({videoB1,videoB0,5'b0}),
+	.BLANK_I(hBlank||vBlank),
+	.HSYNC_I(hSync),			
+	.VSYNC_I(vSync),			
+	.TMDS_D0_O(TMDS[3]),		
+	.TMDS_D1_O(TMDS[5]),		
+	.TMDS_D2_O(TMDS[7]),		
+	.TMDS_CLK_O(TMDS[1])
+);	
 endmodule
