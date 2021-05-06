@@ -429,7 +429,7 @@ port map (
 		interface1DataOut when n_interface1CS = '0' else
 		interface2DataOut when n_interface2CS = '0' else
 		interface3DataOut when n_interface3CS = '0' else
-		interface4DataOut when n_interface4CS = '0' else
+--		interface4DataOut when n_interface4CS = '0' else
 		sdCardDataOut when n_sdCardCS = '0' else
 		monRomData when n_monRomCS = '0' else
 		sramDataOut when n_externalRam1CS= '0' else
@@ -443,8 +443,6 @@ port map (
 	begin
 	if rising_edge(clk) then
 	   cpuData <= cpuDataOut;
-
-	   --CPUClock <= not CPUClock;			--25 MHz
 
 		if intClkCount < 999999 then		-- 1,000,000 for 50 Hz
 			intClkCount <= intClkCount +1;
