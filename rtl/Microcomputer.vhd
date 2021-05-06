@@ -141,7 +141,6 @@ architecture struct of Microcomputer is
 	signal n_sdCardCS				: std_logic :='1';
 
 
-
 begin
 
 -- CPM
@@ -160,6 +159,7 @@ begin
 
 -- ____________________________________________________________________________________
 -- CPU CHOICE GOES HERE
+
 	cpu1 : entity work.t80s
 	generic map(
 		mode 		=> 1, 
@@ -182,6 +182,8 @@ begin
 		di 		=> cpuDataIn,
 		do 		=> cpuDataOut
 	);
+	
+
 -- ____________________________________________________________________________________
 -- ROM GOES HERE	
 	rom1 : entity work.Z80_CMON_ROM -- 2KB CP/M monitor
@@ -426,7 +428,7 @@ port map (
 	cpuDataIn <=
 		interface1DataOut when n_interface1CS = '0' else
 		interface2DataOut when n_interface2CS = '0' else
---		interface3DataOut when n_interface3CS = '0' else
+		interface3DataOut when n_interface3CS = '0' else
 		interface4DataOut when n_interface4CS = '0' else
 		sdCardDataOut when n_sdCardCS = '0' else
 		monRomData when n_monRomCS = '0' else
