@@ -34,16 +34,16 @@ entity SBCTextDisplayRGB is
 		-- VGA 640x480 Default values
 		constant VERT_CHARS				: integer := 25; --25
 		constant HORIZ_CHARS				: integer := 80; --80
-		constant CLOCKS_PER_SCANLINE	: integer := 1600; -- 1600
-		constant DISPLAY_TOP_SCANLINE	: integer := 35+40; --35+40
+		constant CLOCKS_PER_SCANLINE	: integer := 1594; -- 1600
+		constant DISPLAY_TOP_SCANLINE	: integer := 35; --35+40
 		constant DISPLAY_LEFT_CLOCK	: integer := 288; -- 288
-		constant VERT_SCANLINES			: integer := 525; -- 525
+		constant VERT_SCANLINES			: integer := 448; -- 525
 		constant VSYNC_SCANLINES		: integer := 2; -- 2
 		constant HSYNC_CLOCKS			: integer := 192; --192
 		constant VERT_PIXEL_SCANLINES	: integer := 2;   -- 2
 		constant CLOCKS_PER_PIXEL		: integer := 2;   -- 2
 		constant H_SYNC_ACTIVE			: std_logic := '0';
-		constant V_SYNC_ACTIVE			: std_logic := '0';
+		constant V_SYNC_ACTIVE			: std_logic := '1';
 
 		constant DEFAULT_ATT				: std_logic_vector(7 downto 0) := "00001111"; -- background iBGR | foreground iBGR (i=intensity)
 		constant ANSI_DEFAULT_ATT		: std_logic_vector(7 downto 0) := "00000111" -- background iBGR | foreground iBGR (i=intensity)

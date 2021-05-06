@@ -12,8 +12,8 @@ module mc10242g
 	  output DRAM_DQML,
 	  output DRAM_NRAS,
 	  output DRAM_NWE,
-	  output [7:0] TMDS,
-	  output [7:0] LED=7'bZ,
+	  output [7:0] TMDS=8'b0,
+	  output [7:0] LED=8'bZ,
 	  input  USER_BTN,
 	  inout  PS2_CLK,
 	  inout  PS2_DATA,
@@ -43,17 +43,32 @@ pll pll
   .c1 (cpuClock),
   .c2 (clk_ram),
   .c3 (clk_ram_ph),
-  .c4 (clk_25m),
   .locked (pll_locked)
 );
 
-assign LED[0]=~TX;
-assign LED[1]=~RX;
-assign LED[2]=~CTS;
-assign LED[3]=~RTS;
-assign LED[4]=~TX2;
-assign LED[5]=~RX2;
-assign LED[7]=~USER_BTN;
+pll_hdmi pll_hdmi
+(
+  .inclk0 (CLK_12MHZ),
+  .c0 (clk_vdi),
+  .c1 (clk_pixel),
+);
+
+//
+// mainly for comms communication.
+//
+//assign LED[0]=~TX;
+//assign LED[1]=~RX;
+//assign LED[2]=~CTS;
+//assign LED[3]=~RTS;
+//assign LED[4]=~TX2;
+//assign LED[5]=~RX2;
+//assign LED[7]=~USER_BTN;
+
+
+assign TMDS[0]=1'b0;
+assign TMDS[2]=1'b0;
+assign TMDS[4]=1'b0;
+assign TMDS[6]=1'b0;
 
 wire [18:0] sramAddress;
 wire [7:0]  sramDataIn;
@@ -66,6 +81,7 @@ Microcomputer Microcomputer
   .n_reset (USER_BTN),
   .clk     (clk),
   .cpuClock(cpuClock),
+  .cpuData (LED),
   
   .sramDataIn	(sramDataIn),
   .sramDataOut (sramDataOut),
@@ -77,13 +93,13 @@ Microcomputer Microcomputer
   
   .rxd1    (RX),
   .txd1    (TX),
-  .cts1    (CTS),
   .rts1    (RTS),
-
-  .rxd2    (RX2),
-  .txd2    (TX2),
-  .rts2    (1'b0),
-  .cts2    (1'b0),
+  .cts1    (CTS),
+//
+  .rxd3    (RX2),
+  .txd3    (TX2),
+  .rts3    (1'b0),
+  .cts3    (1'b0),
 
   .videoR0  (videoR0),
   .videoG0  (videoG0),
@@ -138,14 +154,14 @@ ssdram ram
 hdmi hdmi_18bits
 (
 	//clocks
-	.CLK_DVI_I(clk_ram),	 
-	.CLK_PIXEL_I(clk_25m),	
+	.CLK_DVI_I(clk_vdi),	 
+	.CLK_PIXEL_I(clk_pixel),	
 
 	// components
-	.R_I({videoR1,videoR0,5'b0}),
-	.G_I({videoG1,videoG0,5'b0}),
-	.B_I({videoB1,videoB0,5'b0}),
-	.BLANK_I(hBlank||vBlank),
+	.R_I({videoR1,videoR0,6'b0}),
+	.G_I({videoG1,videoG0,6'b0}),
+	.B_I({videoB1,videoB0,6'b0}),
+	.BLANK_I((hBlank||vBlank)),
 	.HSYNC_I(hSync),			
 	.VSYNC_I(vSync),			
 	.TMDS_D0_O(TMDS[3]),		
